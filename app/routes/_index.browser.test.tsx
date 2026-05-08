@@ -19,7 +19,7 @@ describe("Home route", () => {
 		).not.toBeNull()
 	})
 
-	it("should render the home page text properly in bosnian", async ({ renderStub }) => {
+	it("should render the home page text properly in spanish", async ({ renderStub }) => {
 		const { getByText } = await renderStub({
 			entries: [
 				{
@@ -30,12 +30,12 @@ describe("Home route", () => {
 				},
 			],
 			i18n: {
-				lng: "bs",
+				lng: "es",
 			},
 		})
 
 		expect(
-			getByText("React Router je zakon!", {
+			getByText("React Router es increíble!", {
 				exact: false,
 			})
 		).not.toBeNull()

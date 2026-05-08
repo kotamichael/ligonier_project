@@ -36,7 +36,7 @@ export default async function handleRequest(
 		.init({
 			...i18n, // spread the configuration
 			lng, // The locale we detected above
-			ns, // The namespaces the routes about to render wants to use
+			ns, // The namespaces the routes about to render want to use
 			resources,
 		})
 
@@ -54,7 +54,7 @@ export default async function handleRequest(
 					responseHeaders.set("Content-Type", "text/html")
 
 					resolve(
-						// @ts-expect-error - We purposely do not define the body as existent so it's not used inside loaders as it's injected there as well
+						// @ts-expect-error - We purposefully do not define the body as existent so it's not used inside loaders as it's injected there as well
 						ctx.body(stream, {
 							headers: responseHeaders,
 							status: didError ? 500 : responseStatusCode,

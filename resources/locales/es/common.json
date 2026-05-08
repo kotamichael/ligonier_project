@@ -1,0 +1,25 @@
+{
+	"Images": "¡Mira estas imágenes encantadoras!",
+	"navigation": {
+		"back": "Volver",
+		"home": "Volver al inicio"
+	},
+	"error": {
+		"500": {
+			"title": "¡Algo salió mal!",
+			"description": "Parece que ocurrió un error inesperado en el servidor."
+		},
+		"404": {
+			"title": "¡Página no encontrada!",
+			"description": "¡Vaya! La página que buscas no existe."
+		},
+		"403": {
+			"title": "¡No autorizado!",
+			"description": "Parece que no puedes acceder a esta página."
+		},
+		"200": {
+			"title": "¡Algo salió mal!",
+			"description": "Parece que ocurrió un error inesperado en el servidor."
+		}
+	}
+}
