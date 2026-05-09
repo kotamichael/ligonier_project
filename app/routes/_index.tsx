@@ -15,9 +15,7 @@ type ImageData = {
 	download_url: string
 }
 
-export type LoaderData = ImageData[]
-
-export async function loader(): Promise<LoaderData> {
+export async function loader() {
 	const res = await fetch("https://picsum.photos/v2/list")
 
 	if (!res.ok) {
@@ -29,9 +27,11 @@ export async function loader(): Promise<LoaderData> {
 	return data
 }
 
+export type LoaderData = Awaited<ReturnType<typeof loader>>
+
 export default function Index() {
 	const { t } = useTranslation()
-	const data = useLoaderData<LoaderData>()
+	const data = useLoaderData() as LoaderData
 
 	return (
 		<div>
