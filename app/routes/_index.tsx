@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next"
 import type { MetaFunction } from "react-router"
-import { useLoaderData } from "react-router"
 
 export const meta: MetaFunction = () => {
 	return [{ title: "Ligonier Take-Home Challenge" }, { name: "description", content: "Check out these images!" }]
 }
 
-type ImageData = {
+export interface Image {
 	id: string
 	author: string
 	width: number
@@ -15,32 +14,36 @@ type ImageData = {
 	download_url: string
 }
 
+export interface ImageResponse {
+	data: Image[]
+}
+
+export interface LoaderData {
+	imagesData: ImageResponse
+}
+
 export async function loader() {
 	const res = await fetch("https://picsum.photos/v2/list")
 
-	if (!res.ok) {
-		throw new Response("Failed to fetch images", { status: res.status })
-	}
-
-	const data: ImageData[] = await res.json()
-
-	return data
+	const imageData = await res.json()
+	return { imagesData: { data: imageData } }
 }
 
-export type LoaderData = Awaited<ReturnType<typeof loader>>
-
-export default function Index() {
+export default function Index({ loaderData }: { loaderData: LoaderData }) {
 	const { t } = useTranslation()
-	const data = useLoaderData() as LoaderData
+	if (!loaderData) return <p>No data found</p>
 
 	return (
-		<div>
-			<h1>{t("welcome")}</h1>
-			<ul>
-				{data.map((item) => (
-					<li key={item.id}>{item.author}</li>
+		<div className="container mx-auto px-4 py-8">
+			<h1 className="mb-6 font-bold text-3xl">{t("welcome")}</h1>
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+				{loaderData.imagesData.data.map((item) => (
+					<div key={item.id} className="border p-4">
+						<img src={item.url} alt={item.author} className="mb-2 h-auto w-full" />
+						<h2 className="font-semibold text-xl">{item.author}</h2>
+					</div>
 				))}
-			</ul>
+			</div>
 		</div>
 	)
 }
