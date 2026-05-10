@@ -7,6 +7,10 @@ import { I18nextProvider, initReactI18next } from "react-i18next"
 import { HydratedRouter } from "react-router/dom"
 import { getInitialNamespaces } from "remix-i18next/client"
 import i18n from "~/localization/i18n"
+import "@fontsource/roboto/300.css"
+import "@fontsource/roboto/400.css"
+import "@fontsource/roboto/500.css"
+import "@fontsource/roboto/700.css"
 
 async function hydrate() {
 	// eslint-disable-next-line import/no-named-as-default-member
