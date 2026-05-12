@@ -1,12 +1,11 @@
-import Masonry from "@mui/lab/Masonry"
+import { Masonry } from "@mui/lab"
+import Box from "@mui/material/Box"
 import Card from "@mui/material/Card"
 import CardActionArea from "@mui/material/CardActionArea"
-import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
-import Collapse from "@mui/material/Collapse"
 import Container from "@mui/material/Container"
+import Divider from "@mui/material/Divider"
 import Fade from "@mui/material/Fade"
-import Paper from "@mui/material/Paper"
 import Typography from "@mui/material/Typography"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -39,50 +38,74 @@ export async function loader() {
 	const res = await fetch("https://picsum.photos/v2/list")
 
 	const imageData = await res.json()
-
-	const sortedImages = [...imageData].sort((a, b) => {
-		const lastNameA = (a.author ?? "").split(/\s+/).at(-1) ?? ""
-		const lastNameB = (b.author ?? "").split(/\s+/).at(-1) ?? ""
-		return lastNameA.localeCompare(lastNameB, undefined, { sensitivity: "base" })
-	})
-	return { imagesData: { data: sortedImages } }
+	return { imagesData: { data: imageData } }
 }
 
 export default function Index({ loaderData }: { loaderData: LoaderData }) {
 	const { t } = useTranslation()
 	const [expandedId, setExpandedId] = useState<string | null>(null)
 
-	const handleExpandClick = (id: string) => {
-		setExpandedId(expandedId === id ? null : id)
-	}
-
 	if (!loaderData) return <p>No data found</p>
 
 	return (
-		<Container>
-			<div className="container mx-auto px-4 py-8">
-				<Masonry sequential columns={3} spacing={2}>
-					<Paper elevation={1} className="mb-3">
-						<Typography variant="h3" component="h1" align="center" gutterBottom>
-							{t("welcome")}
-						</Typography>
-					</Paper>
+		<Box
+			sx={{
+				backgroundImage: "linear-gradient(to bottom, #9ab4a3, #84aa9d 28%, #86a89d 36%, #79a49b 50%, #548d91)",
+				backgroundSize: "cover",
+				backgroundPosition: "center",
+				backgroundRepeat: "no-repeat",
+			}}
+		>
+			<Container sx={{ py: 4 }}>
+				<Typography
+					variant="h1"
+					gutterBottom
+					sx={{
+						color: "#fbf0e6",
+						fontFamily: "Crimson Pro Variable, serif",
+						letterSpacing: {
+							md: "0.2em",
+						},
+						textShadow: "2px 2px #548d91",
+						fontStyle: "italic",
+					}}
+				>
+					{t("heading")}
+					<Divider variant="inset" sx={{ borderColor: "#fbf0e6" }} />
+				</Typography>
+				<Masonry sequential columns={{ xs: 1, sm: 2, lg: 4 }} spacing={2}>
 					{loaderData.imagesData.data.map((imageRow) => (
-						<Card key={imageRow.id} className="relative">
-							<CardActionArea onClick={() => handleExpandClick(imageRow.id)}>
-								<CardMedia component="img" key={imageRow.id} alt={imageRow.author} src={imageRow.download_url} />
+						<Card key={imageRow.id}>
+							<CardActionArea onClick={() => setExpandedId(expandedId === imageRow.id ? null : imageRow.id)}>
+								<CardMedia
+									component="img"
+									loading="lazy"
+									key={imageRow.id}
+									alt={imageRow.author}
+									src={imageRow.download_url}
+								/>
 								<Fade appear={false} in={expandedId === imageRow.id}>
-									<Collapse in={expandedId === imageRow.id} timeout="auto" unmountOnExit>
-										<CardContent>
-											<Typography align="center">{imageRow.author}</Typography>
-										</CardContent>
-									</Collapse>
+									<Box
+										sx={{
+											position: "absolute",
+											bottom: 0,
+											left: 0,
+											width: "100%",
+											bgcolor: "rgba(0, 0, 0, 0.54)",
+											color: "white",
+											padding: "10px",
+										}}
+									>
+										<Typography variant="h5" align="center" sx={{ fontFamily: "Crimson Pro Variable, serif" }}>
+											{imageRow.author}
+										</Typography>
+									</Box>
 								</Fade>
 							</CardActionArea>
 						</Card>
 					))}
 				</Masonry>
-			</div>
-		</Container>
+			</Container>
+		</Box>
 	)
 }

@@ -1,3 +1,4 @@
+import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import type { LinksFunction } from "react-router"
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "react-router"
@@ -7,6 +8,7 @@ import { LanguageSwitcher } from "./library/language-switcher"
 import { globalAppContext } from "./server/context"
 import { ClientHintCheck, getHints } from "./services/client-hints"
 import tailwindcss from "./tailwind.css?url"
+import "@fontsource-variable/crimson-pro/wght.css"
 
 export async function loader({ context, request }: Route.LoaderArgs) {
 	const { lang, clientEnv } = context.get(globalAppContext)
@@ -22,13 +24,15 @@ export const handle = {
 
 export default function App({ loaderData }: Route.ComponentProps) {
 	const { lang, clientEnv } = loaderData
+	let theme = createTheme()
+	theme = responsiveFontSizes(theme)
 	useChangeLanguage(lang)
 	return (
-		<>
+		<ThemeProvider theme={theme}>
 			<Outlet />
 			{/* biome-ignore lint/security/noDangerouslySetInnerHtml: We set the window.env variable to the client env */}
 			<script dangerouslySetInnerHTML={{ __html: `window.env = ${JSON.stringify(clientEnv)}` }} />
-		</>
+		</ThemeProvider>
 	)
 }
 

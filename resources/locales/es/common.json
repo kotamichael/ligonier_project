@@ -1,5 +1,6 @@
 {
-	"welcome": "Haz clic en una imagen para ver al autor",
+	"heading": "GALERÍA",
+	"subheading": "Selecciona una imagen para revelar al autor",
 	"navigation": {
 		"back": "Volver",
 		"home": "Volver al inicio"

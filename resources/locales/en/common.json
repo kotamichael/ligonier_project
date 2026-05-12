@@ -1,5 +1,6 @@
 {
-	"welcome": "Click an image to see the author",
+	"heading": "GALLERY",
+	"subheading": "Select an image to reveal the author",
 	"navigation": {
 		"back": "Go back",
 		"home": "Back to home"
