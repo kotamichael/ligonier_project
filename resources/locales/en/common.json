@@ -5,6 +5,7 @@
 		"back": "Go back",
 		"home": "Back to home"
 	},
+	"loading": "Loading images...",
 	"error": {
 		"500": {
 			"title": "Something went wrong!",

@@ -36,6 +36,7 @@
 		"@fontsource-variable/crimson-pro": "5.2.8",
 		"@fontsource/roboto": "5.2.10",
 		"@forge42/seo-tools": "1.4.5",
+		"@mui/icons-material": "9.0.1",
 		"@mui/lab": "9.0.0-beta.3",
 		"@mui/material": "9.0.1",
 		"@react-router/node": "7.11.0",

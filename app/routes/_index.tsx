@@ -1,51 +1,32 @@
 import { Masonry } from "@mui/lab"
 import Box from "@mui/material/Box"
-import Card from "@mui/material/Card"
-import CardActionArea from "@mui/material/CardActionArea"
-import CardMedia from "@mui/material/CardMedia"
 import Container from "@mui/material/Container"
 import Divider from "@mui/material/Divider"
-import Fade from "@mui/material/Fade"
 import Typography from "@mui/material/Typography"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import type { MetaFunction } from "react-router"
-
-// import { ImageCard } from "~/components/image-card"
+import { useLoaderData } from "react-router"
+import { ImageTile } from "~/components/image-tile"
+import { imageListSchema } from "~/models/image"
+import type { Route } from "./+types/_index"
 
 export const meta: MetaFunction = () => {
 	return [{ title: "Ligonier Take-Home Challenge" }, { name: "description", content: "Check out these images!" }]
 }
 
-export interface ImageRow {
-	id: string
-	author: string
-	width: number
-	height: number
-	url: string
-	download_url: string
+export async function loader({ request }: Route.LoaderArgs) {
+	const response = await fetch("https://picsum.photos/v2/list", { signal: request.signal })
+	const raw = await response.json()
+	const images = imageListSchema.parse(raw)
+
+	return { images }
 }
 
-export interface ImageResponse {
-	data: ImageRow[]
-}
-
-export interface LoaderData {
-	imagesData: ImageResponse
-}
-
-export async function loader() {
-	const res = await fetch("https://picsum.photos/v2/list")
-
-	const imageData = await res.json()
-	return { imagesData: { data: imageData } }
-}
-
-export default function Index({ loaderData }: { loaderData: LoaderData }) {
+export default function Index() {
+	const { images } = useLoaderData<typeof loader>()
 	const { t } = useTranslation()
-	const [expandedId, setExpandedId] = useState<string | null>(null)
-
-	if (!loaderData) return <p>No data found</p>
+	const [showAuthorId, toggleAuthorInfo] = useState<string | null>(null)
 
 	return (
 		<Box
@@ -73,36 +54,14 @@ export default function Index({ loaderData }: { loaderData: LoaderData }) {
 					{t("heading")}
 					<Divider variant="inset" sx={{ borderColor: "#fbf0e6" }} />
 				</Typography>
-				<Masonry sequential columns={{ xs: 1, sm: 2, lg: 4 }} spacing={2}>
-					{loaderData.imagesData.data.map((imageRow) => (
-						<Card key={imageRow.id}>
-							<CardActionArea onClick={() => setExpandedId(expandedId === imageRow.id ? null : imageRow.id)}>
-								<CardMedia
-									component="img"
-									loading="lazy"
-									key={imageRow.id}
-									alt={imageRow.author}
-									src={imageRow.download_url}
-								/>
-								<Fade appear={false} in={expandedId === imageRow.id}>
-									<Box
-										sx={{
-											position: "absolute",
-											bottom: 0,
-											left: 0,
-											width: "100%",
-											bgcolor: "rgba(0, 0, 0, 0.54)",
-											color: "white",
-											padding: "10px",
-										}}
-									>
-										<Typography variant="h5" align="center" sx={{ fontFamily: "Crimson Pro Variable, serif" }}>
-											{imageRow.author}
-										</Typography>
-									</Box>
-								</Fade>
-							</CardActionArea>
-						</Card>
+				<Masonry columns={{ xs: 1, sm: 2, lg: 4 }} spacing={2}>
+					{images.map((imageRow) => (
+						<ImageTile
+							key={imageRow.id}
+							imageRow={imageRow}
+							showAuthorId={showAuthorId}
+							toggleAuthorInfo={toggleAuthorInfo}
+						/>
 					))}
 				</Masonry>
 			</Container>

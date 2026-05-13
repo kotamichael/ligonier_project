@@ -5,6 +5,7 @@
 		"back": "Volver",
 		"home": "Volver al inicio"
 	},
+	"loading": "Cargando imágenes...",
 	"error": {
 		"500": {
 			"title": "¡Algo salió mal!",
